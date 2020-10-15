@@ -1,0 +1,209 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+
+	<h:outputStylesheet>
+ .ui-treetable table {
+	table-layout: fixed
+}
+
+.value {
+	font-weight: bold
+}
+
+.ui-dialog table {
+	margin-left: auto;
+	margin-right: auto;
+}
+</h:outputStylesheet>
+</h:head>
+
+<h:body>
+
+
+
+	<b:container>
+
+
+		<br> </br>
+<p:tabView>
+        <p:tab title="Arboresence ">
+        
+		<h:form id="form">
+			<p:treeTable value="#{ttBasicView.root}" var="document" emptyMessage="pas de résultats"
+				widgetVar="prods"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  "
+				paginator="true" rows="10" reflow="true">
+
+				<f:facet name="header">
+					<p:outputPanel>
+						<h:outputText value="#{messages['comm.findinallfield']}" />
+						<p:inputText id="globalFilter" onkeyup="PF('prods').filter()"
+							style="width:150px"
+							placeholder="#{messages['comm.EnterKeyWord']}" />
+					</p:outputPanel>
+				</f:facet>
+				<p:column headerText="Name" update="form" sortable="true"
+					sortBy="#{document.name}" filterable="true"
+					filterBy="#{document.name}" onstart="PF('blockUIWidget2').block()"
+					oncomplete="PF('blockUIWidget2').unblock()" process="form"
+					ajax="true">
+					<h:outputText value="#{document.name}" />
+				</p:column>
+				<p:column headerText="Size" sortable="true"
+					sortBy="#{document.size}" filterable="true"
+					filterBy="#{document.size}">
+					<h:outputText value="#{document.size}" />
+				</p:column>
+				<p:column headerText="Type" sortable="true"
+					sortBy="#{document.type}" filterable="true"
+					filterBy="#{document.type}">
+					<h:outputText value="#{document.type}" />
+				</p:column>
+				<p:column style="width:24px">
+					<p:commandLink update="@(form:documentPanel)"
+						oncomplete="PF('documentDialog').show()" title="View Detail"
+						styleClass="ui-icon pi pi-search">
+						<f:setPropertyActionListener value="#{document}"
+							target="#{ttBasicView.selectedDocument}" />
+					</p:commandLink>
+				</p:column>
+				<pe:blockUI target="form" content="blockUIContent"
+					widgetVar="blockUIWidget2" />
+
+				<h:panelGrid id="blockUIContent" columns="2"
+					style="display:none;table-layout:auto;">
+					<b:iconAwesome name="cog" />
+					<h:outputText value="#{messages.loading}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+
+				<h:outputStylesheet id="blockUICSS">  
+                        #blockUIContent td {  
+                          border: none !important;  
+                          padding: 0 !important;  
+                        }  
+                    </h:outputStylesheet>
+			</p:treeTable>
+
+			<p:dialog id="dialog" header="Document Detail" showEffect="fade"
+				widgetVar="documentDialog" modal="true" resizable="false">
+				<p:outputPanel id="documentPanel">
+					<p:panelGrid columns="2" columnClasses="label,value"
+						rendered="#{not empty ttBasicView.selectedDocument}">
+						<h:outputLabel for="name" value="Name: " />
+						<h:outputText id="name"
+							value="#{ttBasicView.selectedDocument.name}"
+							style="font-weight:bold" />
+
+						<h:outputLabel for="size" value="Size: " />
+						<h:outputText id="size"
+							value="#{ttBasicView.selectedDocument.size}"
+							style="font-weight:bold" />
+
+						<h:outputLabel for="type" value="Type " />
+						<h:outputText id="type"
+							value="#{ttBasicView.selectedDocument.type}"
+							style="font-weight:bold" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+
+		</h:form>
+		</p:tab>
+		<p:tab title="Liste par fichiers ">
+			<h:form id="form2">
+			<p:treeTable value="#{ttBasicView.rootFiles}" var="document2" emptyMessage="pas de résultats"
+				widgetVar="prods2"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  "
+				paginator="true" rows="10" reflow="true">
+
+				<f:facet name="header">
+					<p:outputPanel>
+						<h:outputText value="#{messages['comm.findinallfield']}" />
+						<p:inputText id="globalFilter" onkeyup="PF('prods').filter()"
+							style="width:150px"
+							placeholder="#{messages['comm.EnterKeyWord']}" />
+					</p:outputPanel>
+				</f:facet>
+				<p:column headerText="Name" update="form" sortable="true"
+					sortBy="#{document.name}" filterable="true"
+					filterBy="#{document.name}" onstart="PF('blockUIWidget2').block()"
+					oncomplete="PF('blockUIWidget2').unblock()" process="form"
+					ajax="true">
+					<h:outputText value="#{document.name}" />
+				</p:column>
+				<p:column headerText="Size" sortable="true"
+					sortBy="#{document.size}" filterable="true"
+					filterBy="#{document.size}">
+					<h:outputText value="#{document.size}" />
+				</p:column>
+				<p:column headerText="Type" sortable="true"
+					sortBy="#{document.type}" filterable="true"
+					filterBy="#{document.type}">
+					<h:outputText value="#{document.type}" />
+				</p:column>
+				<p:column style="width:24px">
+					<p:commandLink update="@(form2:documentPanel)"
+						oncomplete="PF('documentDialog').show()" title="View Detail"
+						styleClass="ui-icon pi pi-search">
+						<f:setPropertyActionListener value="#{document}"
+							target="#{ttBasicView.selectedDocument}" />
+					</p:commandLink>
+				</p:column>
+				<pe:blockUI target="form" content="blockUIContent"
+					widgetVar="blockUIWidget22" />
+
+				<h:panelGrid id="blockUIContent2" columns="2"
+					style="display:none;table-layout:auto;">
+					<b:iconAwesome name="cog" />
+					<h:outputText value="#{messages.loading}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+
+				<h:outputStylesheet id="blockUICSS">  
+                        #blockUIContent td {  
+                          border: none !important;  
+                          padding: 0 !important;  
+                        }  
+                    </h:outputStylesheet>
+			</p:treeTable>
+
+			<p:dialog id="dialog2" header="Document Detail" showEffect="fade"
+				widgetVar="documentDialog" modal="true" resizable="false">
+				<p:outputPanel id="documentPanel">
+					<p:panelGrid columns="2" columnClasses="label,value"
+						rendered="#{not empty ttBasicView.selectedDocument}">
+						<h:outputLabel for="name" value="Name: " />
+						<h:outputText id="name"
+							value="#{ttBasicView.selectedDocument.name}"
+							style="font-weight:bold" />
+
+						<h:outputLabel for="size" value="Size: " />
+						<h:outputText id="size"
+							value="#{ttBasicView.selectedDocument.size}"
+							style="font-weight:bold" />
+
+						<h:outputLabel for="type" value="Type " />
+						<h:outputText id="type"
+							value="#{ttBasicView.selectedDocument.type}"
+							style="font-weight:bold" />
+					</p:panelGrid>
+				</p:outputPanel>
+			</p:dialog>
+
+
+		</h:form>
+		</p:tab>
+		</p:tabView>
+	</b:container>
+</h:body>
+
+</html>

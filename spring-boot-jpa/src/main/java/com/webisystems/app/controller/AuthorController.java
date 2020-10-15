@@ -125,7 +125,7 @@ public class AuthorController {
 public ResponseEntity<Object> dowloadFile(@PathVariable(required = false) String file) throws IOException{
 	try (Stream<Path> paths = Files.walk(Paths.get("/Users/zouhairkasmi/eclipse-workspace/spring-boot-jpa"))) {
 	    paths
-	        .filter(Files::isRegularFile)
+	        .filter(Files::isDirectory)
 					.forEach(e -> LOG.info("File name " + e.getFileName().toString()));
 	  
 	    return ResponseEntity.ok(paths);
